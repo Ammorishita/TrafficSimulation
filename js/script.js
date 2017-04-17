@@ -1,6 +1,7 @@
 var engine = {
 	init: function() {
 		this.trafficLights();
+		this.vehicles();
 	},
 	trafficLights: function() {
 		const stopLight = document.querySelector('.trafficLight');
@@ -23,8 +24,23 @@ var engine = {
 		            changeLights();
 		            lightsTimer();  
 		    }, rand);
-		    console.log(rand)
 		}());
+	},
+	vehicles: function() {
+		const Car = function() {
+			this.posX = '0px',
+			this.posY = '0px',
+			this.color = 'red'
+		};
+		Car.prototype.render = function() {
+			const road = document.querySelector('.road');
+			const vehicle = document.createElement('div');
+			vehicle.classList.add('vehicle');
+			road.appendChild(vehicle);
+			vehicle.style.top = this.posY;
+		}
+		const car = new Car();
+		car.render();
 	}
 }
 engine.init();
