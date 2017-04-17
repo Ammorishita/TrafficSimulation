@@ -1,0 +1,39 @@
+body {
+  background-color: black; }
+
+.container {
+  width: 600px;
+  height: 600px;
+  margin: auto;
+  border: 2px solid Dodgerblue;
+  display: flex; }
+
+.lane {
+  width: 150px;
+  height: 600px;
+  margin: auto;
+  border: 2px solid white;
+  position: relative; }
+
+.rotate90 {
+  transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  /* IE 9 */
+  -webkit-transform: rotate(-90deg);
+  /* Safari */ }
+
+.trafficLight {
+  width: 150px;
+  height: 5px;
+  margin: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%); }
+
+.red {
+  background-color: red; }
+
+.green {
+  background-color: green; }
+
+/*# sourceMappingURL=style.css.map */
