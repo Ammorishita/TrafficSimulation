@@ -1,12 +1,6 @@
 body {
 	background-color: black;
 }
-.vehicle {
-	width: 50px;
-	height: 50px;
-	background-color: blue;
-	position: absolute;
-}
 .container {
 	width: 600px;
 	height: 600px;
@@ -14,11 +8,26 @@ body {
 	border: 2px solid Dodgerblue;
 	display: flex;
 }
-.road {
+.intersection {
 	width: 150px;
-	height: 600px;
+	height: 100px;
+	border-top: 4px solid red;
+	border-bottom: 4px solid red;
+	z-index: 10;
 	margin: auto;
+}
+.lane {
+	width: 150px;
+	height: 225px;
+	margin: auto;
+	border: 2px solid yellow;
+	position: relative;
+}
+.road {
+	width: 300px;
+	height: 600px;
 	border: 2px solid white;
+	margin: auto;
 	position: relative;
 }
 .rotate90 {
@@ -34,9 +43,22 @@ body {
 	top: 50%;
 	transform: translateY(-50%);
 }
+.vehicle {
+	width: 50px;
+	height: 50px;
+	background-color: blue;
+	position: absolute;
+}
+@mixin border($color) {
+	border-top: 4px solid $color;
+	border-bottom: 4px solid $color;
+}
 .red {
-	background-color: red;
+	@include border(red);
 }
 .green {
-	background-color: green;
+	@include border(green);
+}
+.yellow {
+	@include border(yellow);
 }
