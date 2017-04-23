@@ -1,6 +1,26 @@
 body {
 	background-color: black;
 }
+.zone {
+	width: 150px;
+	position: absolute;
+	opacity: .5;
+}
+.brake {
+	height: 50px;
+	background-color: yellow;
+	top: 170px;
+}
+.go {
+	height: 170px;
+	background-color: green;
+	top: 0px;	
+}
+.stop {
+	height: 30px;
+	background-color: red;
+	top: 220px;
+}
 .container {
 	width: 600px;
 	height: 600px;
@@ -46,8 +66,8 @@ body {
 	transform: translateY(-50%);
 }
 .vehicle {
-	width: 50px;
-	height: 50px;
+	width: 25px;
+	height: 25px;
 	background-color: blue;
 	position: absolute;
 }
