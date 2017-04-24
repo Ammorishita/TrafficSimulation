@@ -70,6 +70,8 @@ body {
 	height: 25px;
 	background-color: blue;
 	position: absolute;
+	top: 0px;
+	left: 100px;
 }
 @mixin border($color) {
 	border-top: 4px solid $color;

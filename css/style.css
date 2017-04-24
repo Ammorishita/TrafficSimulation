@@ -71,7 +71,9 @@ body {
   width: 25px;
   height: 25px;
   background-color: blue;
-  position: absolute; }
+  position: absolute;
+  top: 0px;
+  left: 100px; }
 
 .red {
   border-top: 4px solid red;
