@@ -1,6 +1,13 @@
 body {
 	background-color: black;
 }
+button { 
+	width: 100px;
+	height: 100px;
+	z-index: 1000;
+	left: 10px;
+	position: absolute;
+}
 .zone {
 	width: 150px;
 	position: absolute;
