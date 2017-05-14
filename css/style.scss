@@ -8,69 +8,112 @@ button {
 	left: 10px;
 	position: absolute;
 }
-.zone {
-	width: 150px;
-	position: absolute;
-	opacity: .5;
+.container {
+	width: 1000px;
+	height: 800px;
+	margin: auto;
+	border: 2px solid Dodgerblue;
+	display: flex;
+	position: relative;
 }
-.brake {
+.direction {
+	width: 50px;
 	height: 50px;
-	background-color: yellow;
-	top: 170px;
+	position: absolute;
+	background-color: green;
+	opacity: .5;
 }
 .go {
 	height: 170px;
 	background-color: green;
 	top: 0px;	
 }
-.stop {
-	height: 30px;
-	background-color: red;
-	top: 220px;
+.green-light-vertical {
+	border-top: 2px solid green;
+	border-bottom: 2px solid green;
 }
-.container {
-	width: 600px;
-	height: 600px;
-	margin: auto;
-	border: 2px solid Dodgerblue;
-	display: flex;
+.green-light-horizontal {
+	border-left: 2px solid green;
+	border-right: 2px solid green;
 }
 .intersection {
-	width: 150px;
-	height: 100px;
-	position: relative;
-	top: 250px;
-	border-top: 4px red;
-	border-bottom: 4px red;
-	z-index: 10;
+	width: 50px;
+	height: 150px;
+	position: absolute;
+	z-index: 100;
 	margin: auto;
 }
 .lane {
-	width: 150px;
-	height: 600px;
-	margin: auto;
-	border: 2px dashed yellow;
+	width: 35px;
+	height: 35px;
+	background-color: gray;
+	border: 2px dashed white;
 	position: relative;
+	display: flex;
+}
+.lane-horizontal {
+	height: 35px;
 }
 .road {
-	width: 300px;
-	height: 600px;
-	border: 2px solid white;
 	margin: auto;
-	position: relative;
+	position: absolute;
+	display: flex;
+	justify-content: space-around;
+}
+.road-container {
+	width: 1000px;
+	height: 75px;
+	display: block;
+	position: absolute;
+}
+.road-flex-vertical {
+	flex-direction: column;
+}
+.road-flex-horizontal {
+	flex-direction: row;
+}
+.road-horizontal {
+	width: 1000px;
 }
 .rotate90 {
 	transform: rotate(-90deg);
 	-ms-transform: rotate(-90deg); /* IE 9 */
     -webkit-transform: rotate(-90deg); /* Safari */
 }
-.trafficLight {
-	width: 150px;
-	height: 5px;
-	margin: auto;
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
+.red {
+	height: 10px;
+	width: 50px;
+	background-color: red;
+}
+.red-horizontal {
+	width: 10px;
+	height: 50px;
+	background-color: red;
+}
+.red-light-vertical {
+	border-top: 2px solid red;
+	border-bottom: 2px solid red;
+}
+.red-light-horizontal {
+	border-left: 2px solid red;
+	border-right: 2px solid red;
+}
+.red-right-turn {
+	border: 2px solid blue;
+}
+.red-left-turn {
+	border: 2px solid green;
+}
+.red-both-turn {
+	border: 2px solid black;
+}
+.yellow-light-vertical {
+	border-top: 2px solid yellow;
+	border-bottom: 2px solid yellow;
+}
+.yellow-light-horizontal {
+	border-left: 2px solid yellow;
+	border-right: 2px solid yellow;
 }
 .vehicle {
 	width: 25px;
@@ -78,8 +121,13 @@ button {
 	background-color: blue;
 	position: absolute;
 	top: 0px;
-	left: 100px;
+	left: 0px;
 }
+.zone {
+	position: relative;
+	opacity: .5;;
+}
+/*
 @mixin border($color) {
 	border-top: 4px solid $color;
 	border-bottom: 4px solid $color;
@@ -92,4 +140,4 @@ button {
 }
 .yellow {
 	@include border(yellow);
-}
+}*/
