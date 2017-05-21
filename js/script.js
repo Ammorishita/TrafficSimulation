@@ -2,6 +2,9 @@ let vehicleStats = {
 	'speed' : 25
 };
 let intersectionList = [];
+let leftturnList = [];
+let rightturnList = [];
+
 var engine = {
 	init: function() {
 		this.trafficLights();
@@ -10,59 +13,92 @@ var engine = {
 	},
 	trafficLights: function() {
 		const stopLight = document.querySelectorAll('.intersection');
-		let active = true;
+		const leftTurn = document.querySelectorAll('.left-turn');
+		const rightTurn = document.querySelectorAll('.right-turn');
+		const rightTurnVertical = document.querySelectorAll('.vertical');
+		const rightTurnHorizontal = document.querySelectorAll('.horizontal');
+		leftTurn.forEach(function(e) {
+			leftturnList.push(e.getBoundingClientRect());
+		});
 		stopLight.forEach(function(e) {
 			e.classList.add('red-light-vertical');
-			e.classList.add('green-light-horizontal');
+			e.classList.add('red-light-horizontal');
 		});
 		stopLight.forEach(function(e) {
-			if(active) {
-				intersectionList.push(e.getBoundingClientRect());
-				active = false;
-			}
+			intersectionList.push(e.getBoundingClientRect());
 		});
-		function greenLight2() {
-			let lightTime = [1500,3000,4500];
-		    stopLight.forEach(function(e) {
-		    	let rand = Math.round(Math.random() * (8000 - 500)) + 1500;
-		    	setTimeout(function() {
-		    		e.classList.remove('green-light-vertical');
-		    		e.classList.add('yellow-light-vertical');
-		    		setTimeout(function() {
-			    		rand = Math.round(Math.random() * (8000 - 500)) + 1500;
-			    		e.classList.remove('yellow-light-vertical');
-			    		e.classList.add('red-light-vertical');
-					    setTimeout(function() {
-				    		let rand = Math.round(Math.random() * (8000 - 500)) + 1500;
-				    		e.classList.remove('red-light-horizontal')
-				    		e.classList.add('green-light-horizontal');
-				    		greenLight();
-				    	}, 1500);
-		    		}, 3000);
-		    	}, 4000);
-		    });
+		function greenLight(e) {
+			e.classList.remove('red-light-vertical');
+			e.classList.add('green-light-vertical');
+			setTimeout(function() {
+				e.classList.remove('green-light-vertical');	
+				e.classList.add('yellow-light-vertical');
+				setTimeout(function() {
+					rightturnList = [];
+					e.classList.remove('yellow-light-vertical');	
+					e.classList.add('red-light-vertical');
+					rightTurnVertical.forEach(function(e) {
+						e.classList.add('hide');
+						e.classList.remove('visible');
+					});
+					rightTurnHorizontal.forEach(function(e) {
+						e.classList.remove('hide');
+						e.classList.add('visible');
+					});
+					let list = document.querySelectorAll('.visible');
+					list.forEach(function(e) {
+						rightturnList.push(e.getBoundingClientRect());
+					});
+					setTimeout(function() {
+						greenLightHorizontal(e);
+					},3000)
+				},3000)
+			},5500)
 		};
-		function greenLight() {
-		    stopLight.forEach(function(e) {
-		    	let rand = Math.round(Math.random() * (8000 - 500)) + 1500;
-		    	setTimeout(function() {
-		    		e.classList.remove('green-light-horizontal');
-		    		e.classList.add('yellow-light-horizontal');
-		    		setTimeout(function() {
-			    		rand = Math.round(Math.random() * (8000 - 500)) + 1500;
-			    		e.classList.remove('yellow-light-horizontal');
-			    		e.classList.add('red-light-horizontal');
-					    setTimeout(function() {
-				    		let rand = Math.round(Math.random() * (8000 - 500)) + 1500;
-				    		e.classList.remove('red-light-vertical')
-				    		e.classList.add('green-light-vertical');
-				    		greenLight2();
-				    	}, 1500);
-		    		}, 3000);
-		    	}, 4000);
-		    });
+		function greenLightHorizontal(e) {
+			e.classList.remove('red-light-horizontal');
+			e.classList.add('green-light-horizontal');
+			setTimeout(function() {
+				e.classList.remove('green-light-horizontal');	
+				e.classList.add('yellow-light-horizontal');
+				setTimeout(function() {
+					rightturnList = [];
+					e.classList.remove('yellow-light-horizontal');	
+					e.classList.add('red-light-horizontal');
+					rightTurnVertical.forEach(function(e) {
+						e.classList.remove('hide');
+						e.classList.add('visible');
+					});
+					rightTurnHorizontal.forEach(function(e) {
+						e.classList.add('hide');
+						e.classList.remove('visible');
+					});
+					let list = document.querySelectorAll('.visible');
+					list.forEach(function(e) {
+						rightturnList.push(e.getBoundingClientRect());
+					});
+					setTimeout(function() {
+						greenLight(e);
+					},3000)
+				},3000)
+			},5500)
 		};
-		greenLight();
+		function activateLights() {
+		    stopLight.forEach(function(e) {
+		    	greenLight(e);
+		    });
+		    rightTurnHorizontal.forEach(function(e) {
+				e.classList.add('hide');
+			});
+			rightTurnVertical.forEach(function(e) {
+				e.classList.add('visible');
+			});
+			let list = document.querySelectorAll('.visible');
+			list.forEach(function(e) {
+				rightturnList.push(e.getBoundingClientRect());
+			});
+		};
+		activateLights();
 	},
 	addVehicles: function() {
 		let interval = 5000;
@@ -72,6 +108,8 @@ var engine = {
 	},
 	vehicles: function() {
 		const road = document.querySelector('.road');
+		const offramp = document.querySelector('.direction');
+		const offrampPos = offramp.getBoundingClientRect();
 		const map = document.querySelector('.container');
 		const lights = document.querySelector('.intersection');
 		const trafficLight = lights.style.top;
@@ -87,7 +125,10 @@ var engine = {
 			this.drivingUp = true;
 			this.drivingDown = false;
 			this.drivingLeft = false;
+			this.turn = true;
 			this.stopped = false;
+			this.slowing = false;
+			this.accelerate = false;
 			this.accelerateUp = false;
 			this.accelerateDown = false;
 			this.accelerateLeft = false;
@@ -99,6 +140,7 @@ var engine = {
 			this.posX = 250;
 			this.posY = 780;
 			this.accel = 1;
+			this.deccel = 2;
 			this.addCar = function() {
 				allVehicles.push(new Car());
 			}
@@ -114,9 +156,36 @@ var engine = {
 				this.posY = 780;
 			}
 			if(this.drivingLeft) {this.posX = this.posX -= speeds[this.speed];}
-			if(this.drivingRight) {this.posX = this.posX += speeds[tis.speed];}
+			if(this.drivingRight) {this.posX = this.posX += speeds[this.speed];}
 			if(this.drivingDown) {this.posY = this.posY += speeds[this.speed];}
 			if(this.drivingUp) {this.posY = this.posY -= speeds[this.speed];}
+
+			if(this.slowing) {
+				this.deccel = this.deccel -=.005;
+				if(this.slowingDown) {this.posY = this.posY + Math.log(this.deccel)};
+				if(this.slowingUp) {this.posY = this.posY - Math.log(this.deccel)};
+				if(this.slowingLeft) {this.posX = this.posX - Math.log(this.deccel)};
+				if(this.slowingRight) {this.posX = this.posX + Math.log(this.deccel)};
+				if(this.deccel < 1.5) {
+					if(this.slowingDown) {
+						this.slowingDown = false;
+						this.stopped = true;
+					}
+					if(this.slowingUp) {
+						this.slowingUp = false;
+						this.stopped = true;
+					}
+					if(this.slowingRight) {
+						this.slowingRight = false;
+						this.stopped = true;
+					}
+					if(this.slowingLeft) {
+						this.slowingLeft = false;
+						this.stopped = true;
+					}
+					this.deccel = 1;
+				}
+			}
 			if(this.accelerate) {
 				this.accel = this.accel +=.005;
 				if(this.accelerateDown) {this.posY = this.posY + Math.log(this.accel)};
@@ -142,30 +211,90 @@ var engine = {
 					}
 					this.accel = 1;
 				}
-			} else if (this.slowingDown) {
-				this.posY = this.posY + 90/(this.posY * (this.posY/180));
-			} else if (this.slowingUp) {
-				this.posY = this.posY - 90/(this.posY * (this.posY/180));
-			} else if (this.slowingRight) {
-				this.posX = this.posX + 90/(this.posX * (this.posX/180));
-			} else if (this.slowingLeft) {
-				this.posX = this.posX - 90/(this.posX * (this.posX/180));
-			} else if (this.stopped) {
+			}
+			if (this.stopped) {
 				this.posY = this.posY;
 				this.posX = this.posX;
+				this.turn = true;
 			}
+			if((currentY < (offrampPos.bottom - 25)) && (currentY > offrampPos.top) && (currentX < offrampPos.right) && (currentX > (offrampPos.left))) {
+				self.drivingUp = false;
+				self.drivingRight = true;
+			}
+			leftturnList.forEach(function(e) {
+				if((currentY < (e.bottom)) && (currentY > e.top) && (currentX < e.right) && (currentX > ((e.left + 15)))) {
+					if(self.drivingRight && self.turn) {
+						self.drivingRight = false;
+						self.drivingUp = true;
+						self.turn = false;
+						setTimeout(function() {
+							self.turn = true;
+						},400)
+					}
+					if(self.drivingLeft && self.turn) {
+						self.drivingLeft = false;
+						self.drivingDown = true;
+						self.turn = false;
+					}
+					if(self.drivingUp && self.turn) {
+						self.drivingUp = false;
+						self.drivingLeft = true;
+						self.turn = false;
+					}
+					if(self.drivingDown && self.turn) {
+						self.drivingDown = false;
+						self.drivingRight = true;
+						self.turn = false;
+					}
+
+				}			
+			});
+			rightturnList.forEach(function(e) {
+				if((currentY < e.bottom) && (currentY > e.top) && (currentX < e.right) && (currentX > e.left)) {
+					if(self.drivingRight && self.turn) {
+						self.drivingRight = false;
+						self.drivingDown = true;
+						self.turn = false;
+					}
+					if(self.drivingLeft && self.turn) {
+						self.drivingLeft = false;
+						self.drivingUp = true;
+						self.turn = false;
+					}
+					if(self.drivingUp && self.turn) {
+						console.log(currentY, e.bottom)
+						self.drivingUp = false;
+						self.drivingRight = true;
+						self.turn = false;
+						setTimeout(function() {
+							self.turn = true;
+						},1500)
+					}
+					if(self.drivingDown && self.turn) {
+						self.drivingDown = false;
+						self.drivingLeft = true;
+						self.turn = false;
+					}
+				}			
+			});
 			/*intersectionList.forEach(function(e) {
-				if((currentY < e.bottom) && (currentY > e.top) && (currentX < e.right) && (currentX > (e.left))) {
+				if((currentY < (e.bottom + 50)) && currentX > e.left && currentX < e.right && currentY > e.bottom) {
 					self.drivingUp = false;
+					self.slowing = true;
+					self.slowingUp = true;
+					if((currentY < e.bottom) && currentY> e.top) {
+						self.slowing = false;
+						self.slowingUp =false;
+					}
 				}
-			})*/
+			});*/
 		};
 		Car.prototype.render = function() {
 			map.appendChild(this.element);
 			let startingX = [110,145,190,225,270];
 			let randomX = Math.floor(Math.random() * startingX.length);
 			let selectedX = startingX[randomX];
-			this.element.style.left = selectedX + 'px';
+			this.element.style.left = 270 + 'px';
 			this.posX = parseInt(this.element.style.left);
 			this.element.style.top = this.posY + 'px';
 			startingX.splice(randomX,1);
@@ -185,15 +314,15 @@ var engine = {
 	        allVehicles.forEach(function(car) {
 	        	car.update();
 	        	car.element.style.top = car.posY + 'px';
-	        	//car.element.style.left = car.posX + 'px';
+	        	car.element.style.left = car.posX + 'px';
         		//Remove car when it reaches the end of the road.
         		let vehicles = document.querySelectorAll('.vehicle');
     			for (i=0; i<vehicles.length; i++) {
-                    if(parseInt(vehicles[i].style.top) <= 0 || parseInt(vehicles[i].style.top) > 800 || parseInt(vehicles[i].style.left) <= 0 || parseInt(vehicles[i].style.left) >= 980) {
+                    if(parseInt(vehicles[i].style.top) <= 0 || parseInt(vehicles[i].style.top) > 780 || parseInt(vehicles[i].style.left) <= 0 || parseInt(vehicles[i].style.left) >= 980) {
                         vehicles[i].remove();               
                     }
                 }
-	            if(car.posY < 0) {
+	            if(car.posY < 0 || car.posX > 800) {
 	                if(vehicles.length < 2) {
 	                	engine.vehicles();
 	                }	            	

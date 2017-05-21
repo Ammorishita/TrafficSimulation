@@ -36,6 +36,9 @@ button {
 	border-left: 2px solid green;
 	border-right: 2px solid green;
 }
+.hide {
+	display: none;
+}
 .intersection {
 	width: 50px;
 	height: 150px;
@@ -53,6 +56,12 @@ button {
 }
 .lane-horizontal {
 	height: 35px;
+}
+.left-turn {
+	width: 40px;
+	height: 40px;
+	background-color: dodgerblue;
+	position: absolute;
 }
 .road {
 	margin: auto;
@@ -107,6 +116,12 @@ button {
 .red-both-turn {
 	border: 2px solid black;
 }
+.right-turn {
+	width: 40px;
+	height: 40px;
+	background-color: purple;
+	position: absolute;
+}
 .yellow-light-vertical {
 	border-top: 2px solid yellow;
 	border-bottom: 2px solid yellow;
@@ -122,6 +137,7 @@ button {
 	position: absolute;
 	top: 0px;
 	left: 0px;
+	z-index: 20;
 }
 .zone {
 	position: relative;
